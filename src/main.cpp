@@ -254,7 +254,7 @@ void setup() {
 
   // initial values
   config_data_t c;
-  if (!config_read(&c)) {
+  if (config_read(&c) != 0) {
     // initial values
     c.midi_ch = 0;
     c.root_note = MIDI_C2;
