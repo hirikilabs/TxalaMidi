@@ -6,7 +6,7 @@ static Preferences prefs;
 
 int config_read(config_data_t *data) {
   if (!prefs.begin(CONFIG_NAMESPACE, false))
-    return -1;
+    return CONFIG_ERROR;
   // check if preferences exist
   if (!prefs.isKey(PREFS_KEY_MIDICH) || !prefs.isKey(PREFS_KEY_ROOTNOTE) ||
       !prefs.isKey(PREFS_KEY_SCALE)) {
@@ -20,7 +20,7 @@ int config_read(config_data_t *data) {
   data->scale = prefs.getUChar(PREFS_KEY_SCALE);
   data->midi_ch = prefs.getUChar(PREFS_KEY_MIDICH);
   prefs.end();
-  return 0;
+  return CONFIG_READ_OK;
 }
 
 void config_save(config_data_t data) {

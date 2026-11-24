@@ -3,6 +3,8 @@
 
 #include <Preferences.h>
 
+#define CONFIG_READ_OK 0
+#define CONFIG_ERROR -1
 #define CONFIG_NAMESPACE "TxalaConfig"
 #define PREFS_KEY_ROOTNOTE "RootNote"
 #define PREFS_KEY_SCALE "Scale"
