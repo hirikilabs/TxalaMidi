@@ -10,3 +10,6 @@
 lib
 boards
 test
+compile_commands.json
+.clangd
+.vscode
