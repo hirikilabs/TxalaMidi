@@ -121,11 +121,16 @@ static void task_midi_write(__attribute__((unused)) void *arg) {
   }
 }
 
+// listens for GUI control flags (encoder and encoder button)
+// and changes parameters/selections
 static void task_gpio_control(__attribute__((unused)) void *arg) {
   for (;;) {
     delay(1);
+    // if something is selected...
     if (gui_get_selected() != GUI_SELECTED_NONE) {
+      // encoder left
       if (gui_get_left_flag()) {
+        // root note
         if (gui_get_selected() == GUI_SELECTED_ROOT) {
           midi_data.root_note--;
           if (midi_data.root_note < MIDI_C0) {
@@ -135,6 +140,7 @@ static void task_gpio_control(__attribute__((unused)) void *arg) {
           gui_clear(&u8g2);
           gui_show_data(&u8g2, &midi_data);
           gui_update(&u8g2);
+          // scale
         } else if (gui_get_selected() == GUI_SELECTED_SCALE) {
           if (midi_data.scale > SCALE_CHROMATIC) {
             midi_data.scale--;
@@ -143,6 +149,7 @@ static void task_gpio_control(__attribute__((unused)) void *arg) {
           gui_clear(&u8g2);
           gui_show_data(&u8g2, &midi_data);
           gui_update(&u8g2);
+          // channel
         } else if (gui_get_selected() == GUI_SELECTED_MIDICH) {
           if (midi_data.channel > 0)
             midi_data.channel--;
@@ -152,7 +159,9 @@ static void task_gpio_control(__attribute__((unused)) void *arg) {
         }
         gui_left_action();
       }
+      // encoder right
       if (gui_get_right_flag()) {
+        // root note
         if (gui_get_selected() == GUI_SELECTED_ROOT) {
           midi_data.root_note++;
           if (midi_data.root_note > MIDI_C8) {
@@ -162,6 +171,7 @@ static void task_gpio_control(__attribute__((unused)) void *arg) {
           gui_clear(&u8g2);
           gui_show_data(&u8g2, &midi_data);
           gui_update(&u8g2);
+          // scale
         } else if (gui_get_selected() == GUI_SELECTED_SCALE) {
           midi_data.scale++;
           if (midi_data.scale > SCALE_LOCRIAN) {
@@ -171,6 +181,7 @@ static void task_gpio_control(__attribute__((unused)) void *arg) {
           gui_clear(&u8g2);
           gui_show_data(&u8g2, &midi_data);
           gui_update(&u8g2);
+          // channel
         } else if (gui_get_selected() == GUI_SELECTED_MIDICH) {
           midi_data.channel++;
           if (midi_data.channel > 15) {
@@ -183,12 +194,13 @@ static void task_gpio_control(__attribute__((unused)) void *arg) {
         gui_right_action();
       }
     }
+    // button pressed, update gui
     if (gui_get_pressed_flag()) {
       gui_clear(&u8g2);
       gui_show_data(&u8g2, &midi_data);
       gui_update(&u8g2);
       gui_pressed_action();
-      // ok, save modified values
+      // and save modified values
       config_save((config_data_t){.midi_ch = midi_data.channel,
                                   .root_note = midi_data.root_note,
                                   .scale = midi_data.scale});
@@ -252,7 +264,7 @@ void setup() {
   while (!Serial && millis() < 5000)
     delay(10);
 
-  // initial values
+  // saved configuration and initial values
   config_data_t c;
   if (config_read(&c) != CONFIG_READ_OK) {
     // initial values
