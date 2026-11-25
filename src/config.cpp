@@ -4,6 +4,7 @@
 
 static Preferences prefs;
 
+// reads config data from NVM and fills config structure from it
 int config_read(config_data_t *data) {
   if (!prefs.begin(CONFIG_NAMESPACE, false))
     return CONFIG_ERROR;
@@ -23,6 +24,7 @@ int config_read(config_data_t *data) {
   return CONFIG_READ_OK;
 }
 
+// saves config data to NVM
 void config_save(config_data_t data) {
   prefs.begin(CONFIG_NAMESPACE, false);
   prefs.putUChar(PREFS_KEY_ROOTNOTE, data.root_note);

@@ -3,7 +3,6 @@
 
 #include "midi.h"
 #include "txala.h"
-// #include <ESP32RotaryEncoder.h>
 #include <U8g2lib.h>
 
 typedef enum {

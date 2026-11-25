@@ -1,7 +1,7 @@
-#include "midi.h"
 #include "USB.h"
 #include "esp32-hal-tinyusb.h"
 #include "midi-notes.h"
+#include "midi.h"
 #include <stdint.h>
 
 // scales
@@ -79,6 +79,7 @@ void midi_transpose_notes(midi_data_t *data, uint8_t value) {
   }
 }
 
+// USB Midi, sets USB descriptor
 uint16_t midi_usb_load_descriptor(uint8_t *dst, uint8_t *itf) {
   uint8_t str_index = tinyusb_add_string_descriptor("Txala MIDI");
   uint8_t ep_num = tinyusb_get_free_duplex_endpoint();
@@ -92,6 +93,7 @@ uint16_t midi_usb_load_descriptor(uint8_t *dst, uint8_t *itf) {
   return TUD_MIDI_DESC_LEN;
 }
 
+// USB Midi, event callback
 void midi_usb_event_callback(__attribute__((unused)) void *arg,
                              esp_event_base_t event_base, int32_t event_id,
                              void *event_data) {
@@ -118,6 +120,7 @@ void midi_usb_event_callback(__attribute__((unused)) void *arg,
   }
 }
 
+// sends a Midi note on event
 void midi_usb_note_on(uint8_t channel, uint8_t pitch, uint8_t velocity) {
   if (tud_midi_mounted()) {
     uint8_t note_on[3] = {(uint8_t)(NOTE_ON | channel), pitch, velocity};
@@ -125,6 +128,7 @@ void midi_usb_note_on(uint8_t channel, uint8_t pitch, uint8_t velocity) {
   }
 }
 
+// sends a Midi note off event
 void midi_usb_note_off(uint8_t channel, uint8_t pitch, uint8_t velocity) {
   if (tud_midi_mounted()) {
     uint8_t note_off[3] = {(uint8_t)(NOTE_OFF | channel), pitch, velocity};
@@ -132,6 +136,7 @@ void midi_usb_note_off(uint8_t channel, uint8_t pitch, uint8_t velocity) {
   }
 }
 
+// sends a Midi CC change event
 void midi_usb_cc_change(uint8_t channel, uint8_t control, uint8_t value) {
   if (tud_midi_mounted()) {
     uint8_t cc[3] = {(uint8_t)(MIDI_CC | channel), control, value};

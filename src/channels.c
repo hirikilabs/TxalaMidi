@@ -1,5 +1,6 @@
 #include "channels.h"
 
+// initializes data on each channel
 void channels_init_data(channel_data_t *data) {
   for (size_t ch = 0; ch < NUM_CHANNELS; ch++) {
     // trends
@@ -14,6 +15,8 @@ void channels_init_data(channel_data_t *data) {
   }
 }
 
+// moves all sensor values up a slot in the array
+// to make way for the new values
 void channel_move_last_values(channel_data_t *data) {
   // move all sensor values up a slot
   for (size_t ch = 0; ch < NUM_CHANNELS; ch++) {
@@ -23,6 +26,7 @@ void channel_move_last_values(channel_data_t *data) {
   }
 }
 
+// calculates channel trend, uses linear regression
 channel_trend_t channel_get_trend(channel_data_t *data, uint8_t channel) {
   int sum = 0;
   int mult_data = 0;
