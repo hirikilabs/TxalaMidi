@@ -1,7 +1,6 @@
 #include "gui.h"
 #include "midi.h"
 #include "txala.h"
-#include <ESP32RotaryEncoder.h>
 #include <FunctionalInterrupt.h>
 
 static uint8_t right_flag, left_flag, pressed_flag;

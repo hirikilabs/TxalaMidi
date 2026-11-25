@@ -8,7 +8,6 @@
 #include "txala.h"
 #include <Adafruit_ADS7830.h>
 #include <Arduino.h>
-#include <ESP32RotaryEncoder.h>
 #include <SPI.h>
 #include <TinyLED.h>
 #include <U8g2lib.h>
